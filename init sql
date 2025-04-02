@@ -6,4 +6,4 @@ CREATE TABLE devs (
   name VARCHAR(50)
 );
 
-INSERT INTO devs (name) VALUES ('Flask Developer'), ('Node Developer'), ('Shared DB User');
+INSERT INTO devs (Kehinde Isal) VALUES ('Flask Developer'), ('Node Developer'), ('Shared DB User');
