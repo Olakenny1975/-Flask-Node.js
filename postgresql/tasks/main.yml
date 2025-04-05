@@ -3,7 +3,7 @@
   package:
     name: postgresql
     state: present
-  when: ansible_distrubution == "CentOS"
+  when: ansible_distribution == "CentOS"
 - name: Install PostgreSQL (Debian)
   apt:
     name: postgresql
