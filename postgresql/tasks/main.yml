@@ -1,6 +1,6 @@
 ---
 - name: Install PostgreSQL (RedHat)
-  yum:
+  package:
     name: postgresql-server
     state: present
   when: ansible_os_family == "RedHat"
