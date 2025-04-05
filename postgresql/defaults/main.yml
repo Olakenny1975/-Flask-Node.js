@@ -1,0 +1,5 @@
+---
+db_name: "sharedappdb"
+db_user: "devops"
+db_password: "password"
+db_host: "localhost"

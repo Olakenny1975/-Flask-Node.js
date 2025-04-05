@@ -1,0 +1,14 @@
+---
+- name: Deploy Flask and Node.js apps with shared PostgreSQL database
+  hosts: all
+  become: yes
+  vars:
+  db_name: "sharedappdb"
+  db_user: "devops"
+  db_password: "password"
+  flask_port: 5000
+  node_port: 3000
+  roles:
+  - role: postgresql
+  - role: flask-deploy
+  - role: nodejs-deploy

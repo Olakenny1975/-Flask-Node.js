@@ -1,0 +1,4 @@
+---
+flask_app_source: "/path/to/flask-app"  # Path to the Flask app source code
+flask_user: "ec2-user"
+flask_group: "ec2-user"

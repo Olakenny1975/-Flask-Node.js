@@ -1,0 +1,7 @@
+node_app_source: "/path/to/node-app"  # Path to the Node.js app source code
+node_user: "ec2-user"
+node_group: "ec2-user"
+node_port: 3000
+db_host: "localhost"
+db_user: "devops"
+db_password: "password"

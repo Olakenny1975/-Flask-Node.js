@@ -1,0 +1,13 @@
+[Unit]
+Description=Flask App
+After=network.target
+
+[Service]
+User={{ flask_user }}
+Group={{ flask_group }}
+WorkingDirectory=/var/www/flask-app
+ExecStart=/var/www/flask-app/venv/bin/python3 /var/www/flask-app/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

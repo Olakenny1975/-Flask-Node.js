@@ -1,0 +1,16 @@
+---
+- name: Install PostgreSQL
+  yum:
+    name: postgresql-server
+    state: present
+- name: Initialize PostgreSQL database
+  command: postgresql-setup initdb
+- name: Start and enable PostgreSQL service
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+- name: Run init.sql script
+  become: yes
+  become_user: postgres
+  shell: psql -f /path/to/init.sql
