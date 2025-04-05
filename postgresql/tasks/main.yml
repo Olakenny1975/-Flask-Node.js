@@ -1,7 +1,7 @@
 ---
 - name: Install PostgreSQL 
   package:
-    name: postgresql-server
+    name: postgresql
     state: present
   when: ansible_distrubution == "CentOS"
 - name: Install PostgreSQL (Debian)
