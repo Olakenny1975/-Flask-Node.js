@@ -1,6 +1,6 @@
 ---
 - name: Install PostgreSQL
-  yum:
+  apt:
     name: postgresql-server
     state: present
 - name: Initialize PostgreSQL database
