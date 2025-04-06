@@ -1,12 +1,12 @@
 ---
 - name: Install PostgreSQL on Amazon Linux
   package:
-    name: postgresql
+    name: postgresql-server
     state: present
   when: ansible_distribution | lower == "amazon"
 - name: Install PostgreSQL on Debian
   apt:
-    name: postgresql
+    name: postgresql-server
     update_cache: yes
   when: ansible_os_family == "Debian"
 - name: Install PostgreSQL 14 on RHEL/CentOS
