@@ -1,7 +1,5 @@
 ---
 - name: Install and Configure PostgreSQL
-
-  become: yes
   vars:
     pg_version: "14"
     db_name: "sharedappdb"
