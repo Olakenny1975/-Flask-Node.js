@@ -1,0 +1,6 @@
+---
+- name: Configure Jenkins Agent Server
+  hosts: jenkins_agents
+  become: yes
+  roles:
+    - jenkins_agent
