@@ -1,14 +1,14 @@
 ---
 - name: Configure the PostgreSQL RPM repository
-  dnf:
-   name: "https://download.postgresql.org/pub/reps/yum/reporpms/F-34-x86_64/pgdg-fedora-repo-latest.noarch.rpm"
+  yum:
+   name: "https://download.postgresql.org/pub/repos/yum/reporpms/F-34-x86_64/pgdg-linux-repo-latest.noarch.rpm"
    state: present
 
 - name: Install PostgreSQL 
   package:
     name: postgresql
     state: present
-  when: ansible_distribution == "CentOS"
+  when: ansible_distribution == "Amazon linux"
 
 - name: Install PostgreSQL (Debian)
   apt:
