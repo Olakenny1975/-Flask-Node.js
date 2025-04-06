@@ -1,0 +1,35 @@
+---
+- name: Install Java 17 (Jenkins agent dependency)
+  become: yes
+  command: dnf5 install -y java-17-openjdk java-17-openjdk-devel
+- name: Create Jenkins User
+  user:
+    name: jenkins
+    shell: /bin/bash
+    create_home: true
+    home: /home/Jenkins
+- name: Check Jenkins directory exists
+  file:
+    path: /opt/jenkins
+    state: directory
+    owner: jenkins
+    group: jenkins
+    mode: '0755'
+- name: Download Jenkins Agent JAR
+  get_url:
+    url: "http://172.31.4.38:8080/jnlpJars/agent.jar"
+    dest: "/opt/jenkins/agent.jar"
+    owner: jenkins
+    group: jenkins
+    mode: '0644'
+- name: Create Systemd Service for Jenkins Agent
+  template:
+    src: jenkins_agent.service.j2
+    dest: /etc/systemd/system/jenkins_agent.service
+  notify: Restart Jenkins Agent
+- name: Restart Jenkins roles/jenkins_agent
+  become: yes
+  systemd:
+    name: jenkins-agent
+    state: restarted
+    daemon_reload: yes                                                                         ... (edited) 
