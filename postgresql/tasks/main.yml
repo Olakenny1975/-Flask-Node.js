@@ -1,6 +1,6 @@
 ---
 - name: Install and Configure PostgreSQL
-  hosts: all
+
   become: yes
   vars:
     pg_version: "14"
