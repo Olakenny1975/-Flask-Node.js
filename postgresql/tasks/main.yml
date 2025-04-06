@@ -1,13 +1,80 @@
 ---
-- name: check if database is initialized
-  stat:
-   path: /var/lib/pgsql/14/data/pg_hba.conf
-   register: result
-- name: Initialize the database
-  shell: /usr/pgsql-14/bin/postgresql-14-setup initdb
-  when: not result.stat.exists
-- name: Start and enable PostgreSQL service
-  service:
-    name: postgresql
-    state: started
-    enabled: yes
+- name: Install and Configure PostgreSQL
+  hosts: all
+  become: yes
+  vars:
+    pg_version: "14"
+    db_name: "sharedappdb"
+    db_user: "devops"
+    db_password: "password"
+  tasks:
+    # --------- INSTALLATION ---------
+    - name: Install PostgreSQL on Amazon Linux
+      package:
+        name: postgresql
+        state: present
+      when: ansible_distribution | lower == "amazon"
+    - name: Install PostgreSQL on Debian
+      apt:
+        name: postgresql
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+    - name: Install PostgreSQL 14 on RHEL/CentOS
+      yum:
+        name:
+          - postgresql14
+          - postgresql14-server
+        state: present
+      when: ansible_os_family == "RedHat"
+    # --------- INITIALIZE DB IF NEEDED ---------
+    - name: Check if PostgreSQL is initialized
+      stat:
+        path: /var/lib/pgsql/{{ pg_version }}/data/pg_hba.conf
+      register: result
+      when: ansible_os_family == "RedHat"
+    - name: Initialize the PostgreSQL database
+      shell: /usr/pgsql-{{ pg_version }}/bin/postgresql-{{ pg_version }}-setup initdb
+      when: ansible_os_family == "RedHat" and not result.stat.exists
+    # --------- START SERVICE ---------
+    - name: Enable and start PostgreSQL service (RHEL)
+      systemd:
+        name: postgresql-{{ pg_version }}
+        state: started
+        enabled: yes
+      when: ansible_os_family == "RedHat"
+    - name: Enable and start PostgreSQL (Debian & Amazon)
+      systemd:
+        name: postgresql
+        state: started
+        enabled: yes
+      when: ansible_os_family == "Debian" or ansible_distribution | lower == "amazon"
+    # --------- CREATE USER & DATABASE ---------
+    - name: Ensure PostgreSQL user exists
+      become_user: postgres
+      postgresql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        role_attr_flags: LOGIN
+    - name: Ensure database exists
+      become_user: postgres
+      postgresql_db:
+        name: "{{ db_name }}"
+        owner: "{{ db_user }}"
+    # --------- ALLOW REMOTE CONNECTIONS (Optional) ---------
+    - name: Allow remote access in pg_hba.conf
+      lineinfile:
+        path: "/var/lib/pgsql/{{ pg_version }}/data/pg_hba.conf"
+        line: "host    all             all             0.0.0.0/0               md5"
+        state: present
+      when: ansible_os_family == "RedHat"
+    - name: Allow listening on all IPs in postgresql.conf
+      lineinfile:
+        path: "/var/lib/pgsql/{{ pg_version }}/data/postgresql.conf"
+        regexp: "^#?listen_addresses ="
+        line: "listen_addresses = '*'"
+      when: ansible_os_family == "RedHat"
+    - name: Restart PostgreSQL to apply changes
+      systemd:
+        name: "postgresql-{{ pg_version }}"
+        state: restarted
+      when: ansible_os_family == "RedHat"
