@@ -1,16 +1,4 @@
 ---
-- name: Install PostgreSQL 
-  package:
-    name: postgresql
-    state: present
-  when: ansible_distribution == "Amazon linux"
-
-- name: Install PostgreSQL (Debian)
-  apt:
-    name: postgresql
-    update_cache: yes
-  when: ansible_os_family == "Debian"
-
 - name: check if database is initialized
   stat:
    path: /var/lib/pgsql/14/data/pg_hba.conf
