@@ -11,5 +11,6 @@
     node_port: 3000
 
   roles:
+    - role: postgreSQL-deploy
     - role: flask-deploy
     - role: nodejs-deploy
