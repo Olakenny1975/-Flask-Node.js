@@ -46,8 +46,8 @@ pipeline {
                     ]
                 )
                 sh '''
-                    ssh ec2-user@18.224.150.121 "sudo systemctl restart flask-app"
-                    ssh ec2-user@18.224.150.121 "pm2 restart node-app"
+                    ssh ec2-user@18.221.114.251"sudo systemctl restart flask-app"
+                    ssh ec2-user@18.221.114.251 "pm2 restart node-app"
                 '''
             }
         }
