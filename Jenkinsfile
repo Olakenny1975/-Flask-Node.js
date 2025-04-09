@@ -5,8 +5,8 @@ pipeline {
         NODE_APP_PATH = '/opt/node-app'
         FLASK_PORT = 5000
         NODE_PORT = 3000
-        EC2_HOST = '18.221.114.251:'   
-        EC2_USER = 'ssh -i sulaiman.pem ec2-user@18.221.114.251:'       
+        EC2_HOST = '18.118.95.236:'   
+        EC2_USER = 'ssh -i sulaiman.pem ec2-user@18.118.95.236:'       
     }
     stages {
         stage('Checkout') {
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh ${ec2-user@18.221.114.251} << EOF
+                    ssh ${ec2-user@18.118.95.236} << EOF
                     cd ${FLASK_APP_PATH}
                     export FLASK_APP=app.py
                     nohup python3 ${FLASK_APP_PATH}/app.py --host=0.0.0.0 --port=${FLASK_PORT} > flask_app.log 2>&1 &
@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh ${ec2-user@18.221.114.251} << EOF
+                    ssh ${ec2-user@18.118.95.236} << EOF
                     cd ${NODE_APP_PATH}
                     pm2 start ${NODE_APP_PATH}/app.js --name node-app --port=${NODE_PORT}
                     EOF
@@ -56,8 +56,8 @@ pipeline {
         stage('Test Deployment') {
             steps {
                 script {
-                    sh "curl http://${ec2-user@18.221.114.251:${FLASK_PORT}"  // Check Flask app
-                    sh "curl http://${ec2-user@18.221.114.251}:${NODE_PORT}"   // Check Node.js app
+                    sh "curl http://${ec2-user@18.118.95.236:${FLASK_PORT}"  // Check Flask app
+                    sh "curl http://${ec2-user@18.118.95.236:${NODE_PORT}"   // Check Node.js app
                 }
             }
         }
